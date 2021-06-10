@@ -93,6 +93,10 @@ defmodule Surface.Compiler.Tokenizer do
     ok(text_to_acc(buffer, acc))
   end
 
+  defp handle_text(<<>>, _line, _column, buffer, acc, _state) do
+    ok(text_to_acc(buffer, acc))
+  end
+
   defp handle_text("\r\n" <> rest, line, _column, buffer, acc, state) do
     handle_text(rest, line + 1, state.column_offset, ["\r\n" | buffer], acc, state)
   end
@@ -163,10 +167,6 @@ defmodule Surface.Compiler.Tokenizer do
 
   defp handle_text(<<c::utf8, rest::binary>>, line, column, buffer, acc, state) do
     handle_text(rest, line, column + 1, [<<c::utf8>> | buffer], acc, state)
-  end
-
-  defp handle_text(<<>>, _line, _column, buffer, acc, _state) do
-    ok(text_to_acc(buffer, acc))
   end
 
   ## handle_block_open
