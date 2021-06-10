@@ -85,6 +85,14 @@ defmodule Surface.Compiler.Tokenizer do
 
   ## handle_text
 
+  defp handle_text("\r\n", _line, _column, buffer, acc, _state) do
+    ok(text_to_acc(buffer, acc))
+  end
+
+  defp handle_text("\n", _line, _column, buffer, acc, _state) do
+    ok(text_to_acc(buffer, acc))
+  end
+
   defp handle_text("\r\n" <> rest, line, _column, buffer, acc, state) do
     handle_text(rest, line + 1, state.column_offset, ["\r\n" | buffer], acc, state)
   end
